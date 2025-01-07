@@ -3,8 +3,12 @@
 #include <cstring>
 #include <chrono>
 #include <iostream>
+#include <thread>
+#include <vector>
+#include <ctime>
+using namespace std;
 // 存储原始消息
-uint32_t mes[64];
+uint32_t mes[200][64];
 
 // 32-bit rotate
 inline uint32_t ROT(uint32_t x, int n) {
@@ -207,13 +211,26 @@ public:
 private:
     std::chrono::time_point<std::chrono::high_resolution_clock> start_;
 };
-
+vector<thread> a;
+void add(int t)
+{
+    for(uint32_t i=0;i<(1U<<24);i++)
+    {
+        getSha1(mes[t],rand(),i);
+    }
+}
 int main()
 {
     Timer timer;
-    for(uint32_t i=0;i<(1U<<12);i++)
+    srand(time(NULL));
+    for(int i=1;i<=100;i++)
+    a.push_back(thread(&add,i));
+    for(auto &thread:a)
     {
-        getSha1(mes,114514,i);
+        if(thread.joinable())
+        {
+            thread.join();
+        }
     }
     // getSha1(mes,1U<<32,1U<<32);
 }
