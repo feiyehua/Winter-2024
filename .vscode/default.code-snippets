@@ -51,5 +51,32 @@
 		],
 		"description": "for k",
 		
-	}
+	},
+	"Read Number": {
+        "prefix": "fastread",
+        "body": [
+            "template<typename T>",
+            "void fr(T& num)", 
+            "{", 
+            "    char ch;",
+            "    T sign=1;",
+            "    ch=getchar_unlocked();",
+            "    num=0;",
+            "    while(ch>'9'||ch<'0')",
+            "    {",
+            "        if(ch=='-') sign=-1;",
+            "        ch=getchar_unlocked();",
+            "    }",
+            "    while(isdigit(ch))",
+            "    {",
+            "        num=num*10+ch-'0';",
+            "        ch=getchar_unlocked();",
+            "    }",
+            "    (num)*=sign;",
+            "    return;",
+            "}",
+			"$0"
+        ],
+        "description": "Function to read a number from input"
+    }
 }
