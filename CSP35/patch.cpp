@@ -7,6 +7,8 @@
  * @FilePath     : patch.cpp
  * @     © 2024 FeiYehua
  */
+//vector insert操作是在给定的迭代器前插入，而删除是删除迭代器对应的元素；
+//在不同操作中，迭代器不可持久化；想要稳定访问还是得用下表+begin()
 #include <bits/stdc++.h>
 using namespace std;
 int n;
