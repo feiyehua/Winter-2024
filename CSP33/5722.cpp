@@ -43,81 +43,75 @@ struct node
 class List
 {
 private:
-    int cnt=0;
+    int cnt = 0;
 
 public:
     map<int, int> Map;
     void insert(int &x, int &w)
     {
-        if (Map.find(x) == Map.end())
+        Map.insert(make_pair(x, ++cnt)); // 插入新元素，并维护其键值
+        auto it = Map.upper_bound(x);
+        if (Map.rbegin()->first != x)
         {
-            Map.insert(make_pair(x, ++cnt)); // 插入新元素，并维护其键值
-            if (Map.begin()->first != x)
-            {
-                auto it=Map.lower_bound(x);
-                it--;
-                node[cnt].l=it->second;
-                node[it->second].r=cnt;
-            }
-            if (Map.rbegin()->first != x)
-            {
-                auto it = Map.upper_bound(x);
-                node[cnt].r = it->second;
-                node[it->second].l = cnt;
-            }
-            node[cnt].w=w;
-            node[cnt].x=x;
+            node[cnt].r = it->second;
+            node[it->second].l = cnt;
         }
-        else
+        if (Map.begin()->first != x)
         {
-            return;
+            it--;
+            it--;
+            node[cnt].l = it->second;
+            node[it->second].r = cnt;
         }
+
+        node[cnt].w = w;
+        node[cnt].x = x;
     }
     void erase(int x)
     {
-        int p=Map[x];
+        int p = Map[x];
         Map.erase(x);
-        node[node[p].l].r=node[p].r;
-        node[node[p].r].l=node[p].l;
+        node[node[p].l].r = node[p].r;
+        node[node[p].r].l = node[p].l;
     }
-    void boom(int p)    
+    void boom(int p)
     {
-        node[p].w=0;
-        if(node[p].l!=0)
+        node[p].w = 0;
+        if (node[p].l != 0)
         {
             node[node[p].l].w++;
         }
-        if(node[p].r!=0)
+        if (node[p].r != 0)
         {
             node[node[p].r].w++;
         }
         erase(node[p].x);
-        if(node[p].l!=0&&node[node[p].l].w>=5)
+        if (node[p].l != 0 && node[node[p].l].w >= 5)
         {
             boom(node[p].l);
         }
-        if(node[p].r!=0&&node[node[p].r].w>=5)
+        if (node[p].r != 0 && node[node[p].r].w >= 5)
         {
             boom(node[p].r);
         }
     }
-    void add(int& p)
+    void add(int &p)
     {
         // auto it=Map.lower_bound(p);
         node[p].w++;
-        if(node[p].w>=5)
+        if (node[p].w >= 5)
         {
             boom(p);
         }
     }
-    
+
     List()
     {
         for (int i = 1; i <= m; i++)
         {
             fr(x);
             fr(w);
-            insert(x,w);
+            insert(x, w);
         }
     }
 };
@@ -127,10 +121,11 @@ int main()
     fr(m);
     fr(n);
     List l;
-    for(int i=1;i<=n;i++)
+    for (int i = 1; i <= n; i++)
     {
         fr(p);
         l.add(l.Map[p]);
-        cout<<l.Map.size()<<endl;
+        // cout << l.Map.size() << endl;
+        printf("%ld\n",l.Map.size());
     }
 }
